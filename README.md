@@ -82,7 +82,7 @@ Edit `appsettings.json`:
 
 3. **Apply migrations**
 ```bash
-dotnet ef database update
+dotnet ef database update or Update-Database
 ```
 
 4. **Run the API**
