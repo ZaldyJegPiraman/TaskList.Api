@@ -122,7 +122,7 @@ public class AiService : IAiService
         var nextWeek = today.AddDays(7);
 
         var dueToday = tasks
-            .Where(t => t.DueDate.HasValue && t.DueDate.Value.Date <= today)
+            .Where(t => t.DueDate.HasValue && t.DueDate.Value.Date == today)
             .ToList();
 
         var dueSoon = tasks
