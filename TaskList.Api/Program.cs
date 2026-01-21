@@ -4,7 +4,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using TaskList.Api.Data;
+using TaskList.Api.Models;
 using TaskList.Api.Services;
+using TaskList.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +49,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Services
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddHttpClient<IAiService, AiService>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:11434"); // Ollama
+});
+builder.Services.AddScoped<DocumentTextExtractor>();
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -79,6 +86,8 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+
 
 var app = builder.Build();
 

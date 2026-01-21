@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TaskList.Api.Models;
 
 namespace TaskList.Api.Services;
 
@@ -18,6 +19,7 @@ public class JwtService
     {
         var claims = new[]
         {
+               new Claim(ClaimTypes.NameIdentifier, userId.ToString()), // ✅ HERE
         new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
         new Claim(ClaimTypes.Email, email)
     };
