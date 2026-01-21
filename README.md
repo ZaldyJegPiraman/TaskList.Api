@@ -1,12 +1,16 @@
 # TaskList API (ASP.NET Core)
 
 ## Overview
-TaskList API is a RESTful backend built with **ASP.NET Core 8** that supports user authentication and task management for the Task List Application.  
+TaskList API is a RESTful backend built with **ASP.NET Core 8** that supports user authentication and task management for the Task List Application.
 It uses **JWT-based authentication** and **Entity Framework Core** with SQL Server.
+
+In addition to core task management, the API now includes **AI-powered features** for task summarization and document analysis to help users better understand, prioritize, and create tasks.
 
 ---
 
 ## Features
+
+### Core Features
 - User Registration
 - User Login with JWT Authentication
 - Secure Task CRUD operations (per-user)
@@ -18,6 +22,30 @@ It uses **JWT-based authentication** and **Entity Framework Core** with SQL Serv
   - Category
   - Status (To Do, In Progress, Completed)
 
+### 🤖 AI Features
+
+#### AI Task Summary
+- Generates a **user-friendly, conversational summary** of tasks
+- Summary includes:
+  - Overview of total number of tasks
+  - Tasks due today
+  - Tasks due in the next 7 days
+- Tasks are grouped and explained in natural language (not raw data)
+- Uses backend-enforced task grouping to ensure **no task is omitted or reordered**
+
+#### AI Document Analysis
+- Upload and analyze documents to extract actionable task information
+- Supported file types:
+  - `.txt`
+  - `.pdf`
+  - `.docx`
+- Extracts:
+  - Short document summary
+  - Potential tasks
+  - Due dates (normalized to ISO format)
+  - People or email addresses mentioned
+- Extracted tasks can be reviewed and **added directly** to the task list
+
 ---
 
 ## Tech Stack
@@ -27,6 +55,7 @@ It uses **JWT-based authentication** and **Entity Framework Core** with SQL Serv
 - JWT Authentication
 - BCrypt password hashing
 - Swagger (OpenAPI)
+- Local LLM integration (LLaMA / Ollama-compatible)
 
 ---
 
@@ -35,20 +64,24 @@ It uses **JWT-based authentication** and **Entity Framework Core** with SQL Serv
 TaskList.Api
 ├── Controllers
 │   ├── AuthController.cs
-│   └── TasksController.cs
+│   ├── TasksController.cs
+│   └── AiController.cs
 ├── Data
 │   └── AppDbContext.cs
 ├── DTOs
 │   ├── LoginDto.cs
 │   ├── RegisterDto.cs
-│   └── CreateTaskDto.cs
+│   ├── CreateTaskDto.cs
+│   └── DocumentAiResult.cs
 ├── Models
 │   ├── User.cs
 │   ├── TaskItem.cs
 │   ├── TaskPriority.cs
 │   └── TaskStatus.cs
 ├── Services
-│   └── JwtService.cs
+│   ├── JwtService.cs
+│   ├── AiService.cs
+│   └── DocumentTextExtractor.cs
 ├── Program.cs
 └── appsettings.json
 ```
@@ -61,6 +94,7 @@ TaskList.Api
 - .NET SDK 8.0+
 - SQL Server
 - Visual Studio / VS Code
+- Ollama or compatible local LLM service
 
 ---
 
@@ -82,7 +116,7 @@ Edit `appsettings.json`:
 
 3. **Apply migrations**
 ```bash
-dotnet ef database update or Update-Database
+dotnet ef database update
 ```
 
 4. **Run the API**
@@ -124,6 +158,12 @@ Authorization: Bearer <token>
 | PUT | /api/tasks/{id} | Update task |
 | DELETE | /api/tasks/{id} | Delete task |
 
+### AI
+| Method | Endpoint | Description |
+|------|---------|------------|
+| GET | /api/ai/summary | Generate AI task summary |
+| POST | /api/ai/analyze-document | Analyze document and extract tasks |
+
 ---
 
 ## Security
@@ -136,23 +176,23 @@ Authorization: Bearer <token>
 
 ## Development Notes
 - Date values handled in ISO format
-- Enums mapped explicitly to prevent casting issues
-- DTOs used to prevent over-posting
+- AI prompts are backend-controlled to prevent task loss or hallucination
+- AI summaries are conversational but task grouping is enforced server-side
 
 ---
 
 ## Future Enhancements
-- Forgot Password / Reset Password
 - Refresh Tokens
-- Pagination & Filtering
 - Role-based access
+- Task recommendations
+- AI priority suggestions
 - Docker support
 - Unit & Integration Tests
 
 ---
 
 ## Author
-**Zaldy Jeg M. Piraman**  
+**Zaldy Jeg M. Piraman**
 Software Engineer / Full Stack Developer  
 GitHub: https://github.com/ZaldyJegPiraman
 
