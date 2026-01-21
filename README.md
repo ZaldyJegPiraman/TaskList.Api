@@ -1,8 +1,3 @@
-Understood 👍
-Below is **100% copy-paste ready**.
-Just **copy everything** between the lines and paste it into `README.md` in your GitHub repo.
-
----
 
 ```md
 # TaskList API (ASP.NET Core)
@@ -58,7 +53,6 @@ In addition to core task management, the API now includes **AI-powered features*
   - Runs fully locally
   - No OpenAI or paid API keys required
 
----
 
 ## Tech Stack
 - ASP.NET Core 8
